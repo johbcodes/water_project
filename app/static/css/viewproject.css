@@ -1,0 +1,398 @@
+/* General Container Styling */
+.container-fluid {
+    padding: 0 20px;
+    max-width: 100%; /* Ensure container doesn't exceed viewport */
+    overflow-x: hidden; /* Prevent container overflow */
+}
+
+/* Card Styling */
+.card {
+    border-radius: 12px; /* Smoother corners */
+    background-color: #ffffff;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer shadow for depth */
+    overflow: hidden; /* Prevent overflow outside card */
+}
+
+.card-header {
+    padding: 20px 25px;
+    background-color: #f8f9fa; /* Light background for header */
+    border-bottom: 1px solid #dee2e6;
+}
+
+.card-header h1 {
+    margin: 0;
+    font-size: 2rem; /* Larger for prominence */
+    font-weight: 700; /* Bold for emphasis */
+    color: #2c3e50; /* Darker text color */
+}
+
+.card-body {
+    padding: 25px;
+    max-width: 100%; /* Ensure card body doesn't exceed viewport */
+    overflow-x: hidden; /* Prevent card body from adding its own scrollbar */
+}
+
+/* Table Wrapper */
+.table-wrapper {
+    width: 100%;
+    max-width: 100%; /* Constrain wrapper to viewport */
+    overflow-x: hidden; /* Remove external scrollbar; let DataTables handle it */
+    position: relative; /* Ensure positioning context for the table */
+}
+
+/* Table Header */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dataTables_filter input {
+    padding: 8px 15px; /* More padding for better usability */
+    border: 1px solid #ced4da;
+    border-radius: 6px; /* Smoother corners */
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dataTables_filter input:focus {
+    outline: none;
+    border-color: #1a73e8; /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.3); /* Subtle glow on focus */
+}
+
+/* Table Styling */
+table.dataTable {
+    width: 100% !important; /* Force table to fit container */
+    margin-bottom: 0;
+    font-size: 0.95rem; /* Slightly larger for readability */
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+table.dataTable thead th {
+    background-color: #1a73e8; /* Vibrant blue header */
+    color: #ffffff;
+    font-weight: 600;
+    padding: 15px 20px; /* More padding for better spacing */
+    vertical-align: middle;
+    border-bottom: 2px solid #1557b0; /* Darker border for contrast */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    white-space: nowrap; /* Prevent header text wrapping */
+    text-transform: uppercase; /* Uppercase for emphasis */
+    letter-spacing: 0.5px; /* Slight letter spacing */
+}
+
+table.dataTable tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+table.dataTable tbody tr:nth-child(even) {
+    background-color: #f9fbfc; /* Very light blue for alternating rows */
+}
+
+table.dataTable tbody tr:hover {
+    background-color: #e6f0fa; /* Light blue on hover */
+}
+
+table.dataTable td, table.dataTable th {
+    padding: 15px 20px; /* More padding for better readability */
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+    min-width: 130px; /* Adjusted for better readability */
+    max-width: 220px; /* Prevent columns from becoming too wide */
+}
+
+/* Text Wrapping and Truncation */
+.text-wrap {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    cursor: pointer;
+    transition: max-width 0.3s ease;
+}
+
+.truncate.expanded {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: initial;
+    max-width: none;
+}
+
+/* Button Styling */
+.btn-sm {
+    padding: 6px 12px; /* Slightly larger for better touch targets */
+    font-size: 0.9rem; /* Slightly larger for readability */
+    border-radius: 6px; /* Smoother corners */
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.btn-sm:hover {
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.btn-primary {
+    background-color: #1a73e8;
+    border-color: #1a73e8;
+}
+
+.btn-primary:hover {
+    background-color: #1557b0;
+    border-color: #1350a0;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-info {
+    background-color: #17a2b8; /* Bootstrap info color for Upload Excel */
+    border-color: #17a2b8;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.dropdown-menu {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    min-width: 120px;
+}
+
+.dropdown-item {
+    padding: 8px 16px; /* More padding for better click area */
+    font-size: 0.9rem;
+    color: #2c3e50;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #1a73e8; /* Blue text on hover */
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
+    outline: none;
+}
+
+/* DataTables Customizations */
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px 12px;
+    margin: 0 2px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    color: #1a73e8;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #1a73e8;
+    color: #ffffff;
+    border-color: #1a73e8;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #1a73e8;
+    color: #ffffff;
+    border-color: #1a73e8;
+}
+
+.dataTables_wrapper .dataTables_length {
+    display: none; /* Hide length menu if not needed */
+}
+
+/* Ensure the table scroll area is constrained within the table */
+.dataTables_scroll {
+    overflow-x: auto !important; /* Ensure horizontal scrolling within the table */
+    max-width: 100%; /* Constrain to viewport */
+}
+
+.dataTables_scrollHead {
+    overflow-x: hidden !important; /* Prevent header from scrolling independently */
+    max-width: 100%;
+}
+
+.dataTables_scrollBody {
+    overflow-x: auto !important; /* Ensure body scrolls horizontally */
+    max-width: 100%;
+}
+
+/* Scrollbar Styling for the Table */
+.dataTables_scrollBody::-webkit-scrollbar {
+    height: 8px;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-thumb {
+    background-color: #1a73e8; /* Blue scrollbar thumb */
+    border-radius: 4px;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-track {
+    background-color: #f1f3f5; /* Light gray track */
+    border-radius: 4px;
+}
+
+/* Remove unnecessary overflow from parent containers */
+.card-body, .table-wrapper {
+    overflow-x: hidden; /* Let DataTables handle the scrolling */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 0 10px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        padding: 15px 20px;
+    }
+
+    .card-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    table.dataTable td, table.dataTable th {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        min-width: 100px;
+        max-width: 180px;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .dataTables_filter input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .modal-dialog {
+        margin: 10px;
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .card-header .d-flex {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .card-header .btn-sm {
+        width: 100%;
+        text-align: center;
+    }
+
+    .card-header .dropdown {
+        width: 100%;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+    }
+
+    table.dataTable td, table.dataTable th {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+        min-width: 80px;
+        max-width: 150px;
+    }
+
+    .truncate {
+        max-width: 120px;
+    }
+}

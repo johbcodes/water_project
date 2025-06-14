@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_project.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0"><i class="fas fa-plus-circle me-2"></i> Add New Project</h2>
+        </div>
+        <div class="card-body">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Please correct the errors below:</strong>
+                    <ul>
+                        {% for field, errors in form.errors.items() %}
+                            {% for error in errors %}
+                                <li>{{ form[field].label.text }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <form method="POST" action="{{ url_for('main.add_project') }}" class="form-container">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    {% for field in [
+                        'ImplementingAgency', 'Program', 'ProjectName', 'CountyID', 'ConstituencyID', 'WardID',
+                        'GPSCoordinates', 'ProjectType', 'ProjectLocation', 'ScopeOfWorks', 'IntakeCapacity_m3',
+                        'TreatmentCapacity_m3', 'StorageCapacity_m3', 'TreatedWaterMains_km', 'DistributionLines_km',
+                        'NumberOfWaterKiosks', 'NumberOfConnections', 'WastewaterCapacity_m3', 'TargetAreas',
+                        'TargetBeneficiaries_Households', 'TargetBeneficiaries_Population', 'Contractor', 'Consultant',
+                        'StartDate', 'PlannedEndDate', 'ActualEndDate', 'ProgressPercentage', 'TotalContractSum_KES',
+                        'CumulativeExpenditure_KES', 'OutstandingCost_KES', 'ExchequerReleases_KES', 'SumOfPendingBills_KES',
+                        'ApprovedBudgetFY2021_22', 'ApprovedBudgetFY2021_23', 'ApprovedBudgetFY2022_23', 'ApprovedBudgetFY2022_24',
+                        'ApprovedBudgetFY2023_24', 'ApprovedBudgetFY2023_25', 'BudgetAllocationFY2024_25', 'BudgetAllocationFY2024_26'
+                    ] %}
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ field }}" class="form-label">{{ form[field].label }}</label>
+                            {{ form[field](class="form-control", id=field|lower) }}
+                            {% for error in form[field].errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <!-- Funding Information -->
+                    <div class="col-12 mt-4">
+                        <h3>Funding Information</h3>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="source_of_funds" class="form-label">{{ form.SourceOfFunds.label }}</label>
+                        {{ form.SourceOfFunds(class="form-select", id="source_of_funds") }}
+                        {% for error in form.SourceOfFunds.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% for source, field in [
+                        ('GoK', form.GoK_KES), ('AFD', form.AFD_KES), ('ADB', form.ADB_KES), ('EU', form.EU_KES),
+                        ('EIB', form.EIB_KES), ('KfW', form.KfW_KES), ('Belgium', form.Belgium_KES), ('Italy', form.Italy_KES),
+                        ('Netherlands', form.Netherlands_KES), ('EXIMBank', form.EXIMBank_KES), ('WB', form.WB_KES),
+                        ('BADEA', form.BADEA_KES), ('JICA', form.JICA_KES), ('KOREA', form.KOREA_KES), ('OFID', form.OFID_KES),
+                        ('SAUDIARABIA', form.SAUDIARABIA_KES), ('DANIDA', form.DANIDA_KES)
+                    ] %}
+                        <div class="col-md-6 mb-3 funding-amount" id="{{ source }}_amount" style="display: none;">
+                            <label for="{{ field.id }}" class="form-label">{{ field.label }}</label>
+                            {{ field(class="form-control", type="number", step="0.01", id=field.id) }}
+                            {% for error in field.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <!-- Additional Textareas -->
+                    {% for field in ['ImpactsOfTheProject', 'KeyChallenges', 'Remarks'] %}
+                        <div class="col-12 mb-3">
+                            <label for="{{ field }}" class="form-label">{{ form[field].label }}</label>
+                            {{ form[field](class="form-control", id=field|lower, rows="3") }}
+                            {% for error in form[field].errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i> Add Project</button>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-2"></i> Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Same JavaScript logic as provided previously
+    document.addEventListener('DOMContentLoaded', function () {
+        const countyDropdown = document.getElementById('countyid');
+        const constituencyDropdown = document.getElementById('constituencyid');
+        const wardDropdown = document.getElementById('wardid');
+        const sourceOfFundsDropdown = document.getElementById('source_of_funds');
+
+        function populateConstituencies(countyId) {
+            constituencyDropdown.innerHTML = '<option value="" selected>Select Constituency</option>';
+            wardDropdown.innerHTML = '<option value="" selected>Select Ward</option>';
+            if (countyId) {
+                fetch(`/get_constituencies/${countyId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(constituency => {
+                            const option = document.createElement('option');
+                            option.value = constituency.ConstituencyID;
+                            option.textContent = constituency.ConstituencyName;
+                            constituencyDropdown.appendChild(option);
+                        });
+                    });
+            }
+        }
+
+        function populateWards(constituencyId) {
+            wardDropdown.innerHTML = '<option value="" selected>Select Ward</option>';
+            if (constituencyId) {
+                fetch(`/get_wards/${constituencyId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(ward => {
+                            const option = document.createElement('option');
+                            option.value = ward.WardID;
+                            option.textContent = ward.WardName;
+                            wardDropdown.appendChild(option);
+                        });
+                    });
+            }
+        }
+
+        function toggleFundingAmount() {
+            const selectedSource = sourceOfFundsDropdown.value;
+            document.querySelectorAll('.funding-amount').forEach(element => {
+                element.style.display = 'none';
+            });
+            if (selectedSource && selectedSource !== 'None') {
+                document.getElementById(`${selectedSource}_amount`).style.display = 'block';
+            }
+        }
+
+        countyDropdown.addEventListener('change', function () {
+            populateConstituencies(this.value);
+        });
+
+        constituencyDropdown.addEventListener('change', function () {
+            populateWards(this.value);
+        });
+
+        sourceOfFundsDropdown.addEventListener('change', toggleFundingAmount);
+        toggleFundingAmount();
+    });
+</script>
+{% endblock %}

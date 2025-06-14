@@ -1,0 +1,552 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_project.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center my-4">Edit Project</h2>
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            Please correct the errors below:
+            <ul>
+                {% for field, errors in form.errors.items() %}
+                    {% for error in errors %}
+                        <li>{{ form[field].label.text }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <form method="POST" action="{{ url_for('main.edit_project', project_id=project.ProjectID) }}" class="form-container">
+        {{ form.hidden_tag() }}
+
+        <!-- Implementing Agency -->
+        <div class="mb-3">
+            <label for="implementing_agency" class="form-label">{{ form.ImplementingAgency.label }}</label>
+            {{ form.ImplementingAgency(class="form-control", id="implementing_agency") }}
+            {% for error in form.ImplementingAgency.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Program -->
+        <div class="mb-3">
+            <label for="program" class="form-label">{{ form.Program.label }}</label>
+            {{ form.Program(class="form-control", id="program") }}
+            {% for error in form.Program.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Project Name -->
+        <div class="mb-3">
+            <label for="project_name" class="form-label">{{ form.ProjectName.label }}</label>
+            {{ form.ProjectName(class="form-control", id="project_name") }}
+            {% for error in form.ProjectName.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- County Dropdown -->
+        <div class="mb-3">
+            <label for="county_id" class="form-label">{{ form.CountyID.label }}</label>
+            {{ form.CountyID(class="form-select", id="county_id") }}
+            {% for error in form.CountyID.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Constituency Dropdown -->
+        <div class="mb-3">
+            <label for="constituency_id" class="form-label">{{ form.ConstituencyID.label }}</label>
+            {{ form.ConstituencyID(class="form-select", id="constituency_id") }}
+            {% for error in form.ConstituencyID.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Ward Dropdown -->
+        <div class="mb-3">
+            <label for="ward_id" class="form-label">{{ form.WardID.label }}</label>
+            {{ form.WardID(class="form-select", id="ward_id") }}
+            {% for error in form.WardID.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- GPS Coordinates -->
+        <div class="mb-3">
+            <label for="gps_coordinates" class="form-label">{{ form.GPSCoordinates.label }}</label>
+            {{ form.GPSCoordinates(class="form-control", id="gps_coordinates") }}
+            {% for error in form.GPSCoordinates.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Project Type -->
+        <div class="mb-3">
+            <label for="project_type" class="form-label">{{ form.ProjectType.label }}</label>
+            {{ form.ProjectType(class="form-control", id="project_type") }}
+            {% for error in form.ProjectType.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Project Location -->
+        <div class="mb-3">
+            <label for="project_location" class="form-label">{{ form.ProjectLocation.label }}</label>
+            {{ form.ProjectLocation(class="form-select", id="project_location") }}
+            {% for error in form.ProjectLocation.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Scope of Works -->
+        <div class="mb-3">
+            <label for="scope_of_works" class="form-label">{{ form.ScopeOfWorks.label }}</label>
+            {{ form.ScopeOfWorks(class="form-control", id="scope_of_works", rows="3") }}
+            {% for error in form.ScopeOfWorks.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Intake Capacity -->
+        <div class="mb-3">
+            <label for="intake_capacity" class="form-label">{{ form.IntakeCapacity_m3.label }}</label>
+            {{ form.IntakeCapacity_m3(class="form-control", id="intake_capacity") }}
+            {% for error in form.IntakeCapacity_m3.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Treatment Capacity -->
+        <div class="mb-3">
+            <label for="treatment_capacity" class="form-label">{{ form.TreatmentCapacity_m3.label }}</label>
+            {{ form.TreatmentCapacity_m3(class="form-control", id="treatment_capacity") }}
+            {% for error in form.TreatmentCapacity_m3.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Storage Capacity -->
+        <div class="mb-3">
+            <label for="storage_capacity" class="form-label">{{ form.StorageCapacity_m3.label }}</label>
+            {{ form.StorageCapacity_m3(class="form-control", id="storage_capacity") }}
+            {% for error in form.StorageCapacity_m3.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Treated Water Mains -->
+        <div class="mb-3">
+            <label for="treated_water_mains" class="form-label">{{ form.TreatedWaterMains_km.label }}</label>
+            {{ form.TreatedWaterMains_km(class="form-control", id="treated_water_mains") }}
+            {% for error in form.TreatedWaterMains_km.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Distribution Lines -->
+        <div class="mb-3">
+            <label for="distribution_lines" class="form-label">{{ form.DistributionLines_km.label }}</label>
+            {{ form.DistributionLines_km(class="form-control", id="distribution_lines") }}
+            {% for error in form.DistributionLines_km.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Number of Water Kiosks -->
+        <div class="mb-3">
+            <label for="water_kiosks" class="form-label">{{ form.NumberOfWaterKiosks.label }}</label>
+            {{ form.NumberOfWaterKiosks(class="form-control", id="water_kiosks") }}
+            {% for error in form.NumberOfWaterKiosks.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Number of Connections -->
+        <div class="mb-3">
+            <label for="connections" class="form-label">{{ form.NumberOfConnections.label }}</label>
+            {{ form.NumberOfConnections(class="form-control", id="connections") }}
+            {% for error in form.NumberOfConnections.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Wastewater Capacity -->
+        <div class="mb-3">
+            <label for="wastewater_capacity" class="form-label">{{ form.WastewaterCapacity_m3.label }}</label>
+            {{ form.WastewaterCapacity_m3(class="form-control", id="wastewater_capacity") }}
+            {% for error in form.WastewaterCapacity_m3.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Target Areas -->
+        <div class="mb-3">
+            <label for="target_areas" class="form-label">{{ form.TargetAreas.label }}</label>
+            {{ form.TargetAreas(class="form-control", id="target_areas") }}
+            {% for error in form.TargetAreas.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Target Beneficiaries (Households) -->
+        <div class="mb-3">
+            <label for="households" class="form-label">{{ form.TargetBeneficiaries_Households.label }}</label>
+            {{ form.TargetBeneficiaries_Households(class="form-control", id="households") }}
+            {% for error in form.TargetBeneficiaries_Households.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Target Beneficiaries (Population) -->
+        <div class="mb-3">
+            <label for="population" class="form-label">{{ form.TargetBeneficiaries_Population.label }}</label>
+            {{ form.TargetBeneficiaries_Population(class="form-control", id="population") }}
+            {% for error in form.TargetBeneficiaries_Population.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Contractor -->
+        <div class="mb-3">
+            <label for="contractor" class="form-label">{{ form.Contractor.label }}</label>
+            {{ form.Contractor(class="form-control", id="contractor") }}
+            {% for error in form.Contractor.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Consultant -->
+        <div class="mb-3">
+            <label for="consultant" class="form-label">{{ form.Consultant.label }}</label>
+            {{ form.Consultant(class="form-control", id="consultant") }}
+            {% for error in form.Consultant.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Start Date -->
+        <div class="mb-3">
+            <label for="start_date" class="form-label">{{ form.StartDate.label }}</label>
+            {{ form.StartDate(class="form-control", id="start_date") }}
+            {% for error in form.StartDate.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Planned End Date -->
+        <div class="mb-3">
+            <label for="planned_end_date" class="form-label">{{ form.PlannedEndDate.label }}</label>
+            {{ form.PlannedEndDate(class="form-control", id="planned_end_date") }}
+            {% for error in form.PlannedEndDate.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Actual End Date -->
+        <div class="mb-3">
+            <label for="actual_end_date" class="form-label">{{ form.ActualEndDate.label }}</label>
+            {{ form.ActualEndDate(class="form-control", id="actual_end_date") }}
+            {% for error in form.ActualEndDate.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Progress Percentage -->
+        <div class="mb-3">
+            <label for="progress" class="form-label">{{ form.ProgressPercentage.label }}</label>
+            {{ form.ProgressPercentage(class="form-control", id="progress") }}
+            {% for error in form.ProgressPercentage.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Total Contract Sum (KES) -->
+        <div class="mb-3">
+            <label for="total_contract_sum" class="form-label">{{ form.TotalContractSum_KES.label }}</label>
+            {{ form.TotalContractSum_KES(class="form-control", id="total_contract_sum") }}
+            {% for error in form.TotalContractSum_KES.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Cumulative Expenditure (KES) -->
+        <div class="mb-3">
+            <label for="cumulative_expenditure" class="form-label">{{ form.CumulativeExpenditure_KES.label }}</label>
+            {{ form.CumulativeExpenditure_KES(class="form-control", id="cumulative_expenditure") }}
+            {% for error in form.CumulativeExpenditure_KES.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Outstanding Cost (KES) -->
+        <div class="mb-3">
+            <label for="outstanding_cost" class="form-label">{{ form.OutstandingCost_KES.label }}</label>
+            {{ form.OutstandingCost_KES(class="form-control", id="outstanding_cost") }}
+            {% for error in form.OutstandingCost_KES.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Exchequer Releases (KES) -->
+        <div class="mb-3">
+            <label for="exchequer_releases" class="form-label">{{ form.ExchequerReleases_KES.label }}</label>
+            {{ form.ExchequerReleases_KES(class="form-control", id="exchequer_releases") }}
+            {% for error in form.ExchequerReleases_KES.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Sum of Pending Bills (KES) -->
+        <div class="mb-3">
+            <label for="pending_bills" class="form-label">{{ form.SumOfPendingBills_KES.label }}</label>
+            {{ form.SumOfPendingBills_KES(class="form-control", id="pending_bills") }}
+            {% for error in form.SumOfPendingBills_KES.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Approved Budget FY 2021/22 -->
+        <div class="mb-3">
+            <label for="budget_2021_22" class="form-label">{{ form.ApprovedBudgetFY2021_22.label }}</label>
+            {{ form.ApprovedBudgetFY2021_22(class="form-control", id="budget_2021_22") }}
+            {% for error in form.ApprovedBudgetFY2021_22.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Approved Budget FY 2021/23 -->
+        <div class="mb-3">
+            <label for="budget_2021_23" class="form-label">{{ form.ApprovedBudgetFY2021_23.label }}</label>
+            {{ form.ApprovedBudgetFY2021_23(class="form-control", id="budget_2021_23") }}
+            {% for error in form.ApprovedBudgetFY2021_23.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Approved Budget FY 2022/23 -->
+        <div class="mb-3">
+            <label for="budget_2022_23" class="form-label">{{ form.ApprovedBudgetFY2022_23.label }}</label>
+            {{ form.ApprovedBudgetFY2022_23(class="form-control", id="budget_2022_23") }}
+            {% for error in form.ApprovedBudgetFY2022_23.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Approved Budget FY 2022/24 -->
+        <div class="mb-3">
+            <label for="budget_2022_24" class="form-label">{{ form.ApprovedBudgetFY2022_24.label }}</label>
+            {{ form.ApprovedBudgetFY2022_24(class="form-control", id="budget_2022_24") }}
+            {% for error in form.ApprovedBudgetFY2022_24.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Approved Budget FY 2023/24 -->
+        <div class="mb-3">
+            <label for="budget_2023_24" class="form-label">{{ form.ApprovedBudgetFY2023_24.label }}</label>
+            {{ form.ApprovedBudgetFY2023_24(class="form-control", id="budget_2023_24") }}
+            {% for error in form.ApprovedBudgetFY2023_24.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Approved Budget FY 2023/25 -->
+        <div class="mb-3">
+            <label for="budget_2023_25" class="form-label">{{ form.ApprovedBudgetFY2023_25.label }}</label>
+            {{ form.ApprovedBudgetFY2023_25(class="form-control", id="budget_2023_25") }}
+            {% for error in form.ApprovedBudgetFY2023_25.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Budget Allocation FY 2024/25 -->
+        <div class="mb-3">
+            <label for="budget_2024_25" class="form-label">{{ form.BudgetAllocationFY2024_25.label }}</label>
+            {{ form.BudgetAllocationFY2024_25(class="form-control", id="budget_2024_25") }}
+            {% for error in form.BudgetAllocationFY2024_25.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Budget Allocation FY 2024/26 -->
+        <div class="mb-3">
+            <label for="budget_2024_26" class="form-label">{{ form.BudgetAllocationFY2024_26.label }}</label>
+            {{ form.BudgetAllocationFY2024_26(class="form-control", id="budget_2024_26") }}
+            {% for error in form.BudgetAllocationFY2024_26.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Funding Information -->
+        <h3 class="mt-4">Funding Information</h3>
+        <div class="mb-3">
+            <label for="source_of_funds" class="form-label">{{ form.SourceOfFunds.label }}</label>
+            {{ form.SourceOfFunds(class="form-select", id="source_of_funds") }}
+            {% for error in form.SourceOfFunds.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        {% for source, field in [
+            ('GoK', form.GoK_KES), ('AFD', form.AFD_KES), ('ADB', form.ADB_KES), ('EU', form.EU_KES),
+            ('EIB', form.EIB_KES), ('KfW', form.KfW_KES), ('Belgium', form.Belgium_KES), ('Italy', form.Italy_KES),
+            ('Netherlands', form.Netherlands_KES), ('EXIMBank', form.EXIMBank_KES), ('WB', form.WB_KES),
+            ('BADEA', form.BADEA_KES), ('JICA', form.JICA_KES), ('KOREA', form.KOREA_KES), ('OFID', form.OFID_KES),
+            ('SAUDIARABIA', form.SAUDIARABIA_KES), ('DANIDA', form.DANIDA_KES)
+        ] %}
+            <div class="mb-3 funding-amount" id="{{ source }}_amount" style="display: '{% if form.SourceOfFunds.data == source %}block{% else %}none{% endif %}';">
+                <label for="{{ field.id }}" class="form-label">{{ field.label }}</label>
+                {{ field(class="form-control", type="number", step="0.01", id=field.id) }}
+                {% for error in field.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <!-- Impacts of the Project -->
+        <div class="mb-3">
+            <label for="impacts" class="form-label">{{ form.ImpactsOfTheProject.label }}</label>
+            {{ form.ImpactsOfTheProject(class="form-control", id="impacts", rows="3") }}
+            {% for error in form.ImpactsOfTheProject.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Key Challenges -->
+        <div class="mb-3">
+            <label for="challenges" class="form-label">{{ form.KeyChallenges.label }}</label>
+            {{ form.KeyChallenges(class="form-control", id="challenges", rows="3") }}
+            {% for error in form.KeyChallenges.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Remarks -->
+        <div class="mb-3">
+            <label for="remarks" class="form-label">{{ form.Remarks.label }}</label>
+            {{ form.Remarks(class="form-control", id="remarks", rows="3") }}
+            {% for error in form.Remarks.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Submit and Back Buttons -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">Update Project</button>
+            <a href="{{ url_for('main.user_management') }}" class="btn btn-secondary btn-lg ms-2">Back to Dashboard</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const countyDropdown = document.getElementById('county_id');
+        const constituencyDropdown = document.getElementById('constituency_id');
+        const wardDropdown = document.getElementById('ward_id');
+        const sourceOfFundsDropdown = document.getElementById('source_of_funds');
+
+        // Predefined project values
+        const projectCountyID = "{{ project.CountyID|default(0)|int }}";
+        const projectConstituencyID = "{{ project.ConstituencyID|default(0)|int }}";
+        const projectWardID = "{{ project.WardID|default(0)|int }}";
+
+        // Function to populate constituencies
+        function populateConstituencies(countyId) {
+            constituencyDropdown.innerHTML = '<option value="">Select Constituency</option>';
+            wardDropdown.innerHTML = '<option value="">Select Ward</option>';
+
+            if (countyId) {
+                fetch(`/get_constituencies/${countyId}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        data.forEach(constituency => {
+                            const option = document.createElement('option');
+                            option.value = constituency.ConstituencyID;
+                            option.textContent = constituency.ConstituencyName;
+                            if (parseInt(constituency.ConstituencyID) === projectConstituencyID) {
+                                option.selected = true;
+                            }
+                            constituencyDropdown.appendChild(option);
+                        });
+                        const selectedConstituency = constituencyDropdown.value;
+                        if (selectedConstituency) {
+                            populateWards(selectedConstituency);
+                        }
+                    })
+                    .catch(error => console.error('Error fetching constituencies:', error));
+            }
+        }
+
+        // Function to populate wards
+        function populateWards(constituencyId) {
+            wardDropdown.innerHTML = '<option value="">Select Ward</option>';
+
+            if (constituencyId) {
+                fetch(`/get_wards/${constituencyId}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        data.forEach(ward => {
+                            const option = document.createElement('option');
+                            option.value = ward.WardID;
+                            option.textContent = ward.WardName;
+                            if (parseInt(ward.WardID) === projectWardID) {
+                                option.selected = true;
+                            }
+                            wardDropdown.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching wards:', error));
+            }
+        }
+
+        // Function to show/hide funding amount fields
+        function toggleFundingAmount() {
+            const selectedSource = sourceOfFundsDropdown.value;
+            document.querySelectorAll('.funding-amount').forEach(element => {
+                element.style.display = 'none';
+            });
+            if (selectedSource && selectedSource !== 'None') {
+                const amountField = document.getElementById(`${selectedSource}_amount`);
+                if (amountField) {
+                    amountField.style.display = 'block';
+                }
+            }
+        }
+
+        // Event listeners for dropdown changes
+        countyDropdown.addEventListener('change', function () {
+            populateConstituencies(this.value);
+        });
+
+        constituencyDropdown.addEventListener('change', function () {
+            populateWards(this.value);
+        });
+
+        sourceOfFundsDropdown.addEventListener('change', toggleFundingAmount);
+
+        // Initial population on page load
+        if (countyDropdown) {
+            if (projectCountyID) {
+                countyDropdown.value = projectCountyID;
+                populateConstituencies(projectCountyID);
+            }
+        } else {
+            console.error('County dropdown element not found');
+        }
+
+        // Initial call to set funding amount visibility
+        toggleFundingAmount();
+    });
+</script>
+{% endblock %}

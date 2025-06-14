@@ -1,0 +1,181 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', 'Arial', sans-serif; /* Modern font stack */
+    background-color: #e9ecef; /* Light gray background for a clean look */
+    color: #2c3e50; /* Darker text color for better contrast */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6; /* Improved readability */
+}
+
+/* Reports Container */
+.reports-container {
+    max-width: 1400px; /* Slightly wider for better chart visibility */
+    margin: 40px auto; /* More margin for breathing room */
+    padding: 30px;
+    background-color: #ffffff; /* White background for the main container */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Softer, larger shadow for depth */
+    border-radius: 12px; /* Smoother corners */
+}
+
+/* Headings */
+h2 {
+    font-size: 2.5rem; /* Larger heading for prominence */
+    color: #1a73e8; /* Vibrant blue to match water theme */
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 700; /* Bold for emphasis */
+    letter-spacing: 0.5px; /* Slight letter spacing for elegance */
+}
+
+h3 {
+    font-size: 1.75rem; /* Slightly larger for chart titles */
+    color: #34495e; /* Darker shade for contrast */
+    margin-bottom: 20px;
+    font-weight: 600; /* Semi-bold for hierarchy */
+    text-align: center; /* Centered for symmetry */
+}
+
+/* Filters Section */
+.filters {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center;
+    align-items: center;
+    gap: 15px; /* More spacing between elements */
+    margin-bottom: 40px;
+    background-color: #f8f9fa; /* Light background for the filter section */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+}
+
+.filters label {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+.filter-input {
+    padding: 10px 15px; /* More padding for better touch targets */
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: #1a73e8; /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.3); /* Subtle glow on focus */
+}
+
+.filter-button, .export-button {
+    padding: 10px 20px; /* Larger buttons for better usability */
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.filter-button {
+    background-color: #1a73e8; /* Vibrant blue for the apply button */
+    color: #fff;
+}
+
+.filter-button:hover {
+    background-color: #1557b0; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.export-button {
+    background-color: #28a745; /* Green for export button */
+    color: #fff;
+}
+
+.export-button:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Chart Containers */
+.chart-container {
+    margin-bottom: 40px;
+    padding: 25px;
+    background-color: #ffffff; /* White background for charts */
+    border: 1px solid #e9ecef; /* Subtle border */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer shadow for depth */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.chart-container:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+canvas {
+    width: 100% !important;
+    height: 350px !important; /* Slightly shorter height for better proportions */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .reports-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .filters {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .filter-input, .filter-button, .export-button {
+        width: 100%; /* Full width on smaller screens */
+        box-sizing: border-box;
+    }
+
+    .chart-container {
+        padding: 15px;
+    }
+
+    canvas {
+        height: 300px !important; /* Adjust height for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    .filters label {
+        font-size: 0.9rem;
+    }
+
+    .filter-input, .filter-button, .export-button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+
+    canvas {
+        height: 250px !important; /* Further adjust height for very small screens */
+    }
+}

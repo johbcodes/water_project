@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Header Section -->
+    <div class="dashboard-header">
+        <h2>Project Dashboard</h2>
+        <div class="header-actions">
+            <span class="last-updated">Last Updated: {{ current_date }}</span>
+            <button class="btn btn-refresh">Refresh Data</button>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h4>Total Projects</h4>
+            <p class="stat-number">{{ projects|length }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Completed</h4>
+            <p class="stat-number">{{ projects|selectattr('ProgressPercentage', 'equalto', 100)|list|length }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>In Progress</h4>
+            <p class="stat-number">{{ projects|selectattr('ProgressPercentage', 'gt', 0)|selectattr('ProgressPercentage', 'lt', 100)|list|length }}</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-content">
+        <!-- Project Table -->
+        <div class="card project-table-card">
+            <div class="card-header">
+                <h3>Project Overview</h3>
+                <div class="table-controls">
+                    <input type="search" class="search-input" placeholder="Search projects...">
+                    <select class="filter-select">
+                        <option value="all">All Status</option>
+                        <option value="completed">Completed</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="not-started">Not Started</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="project-table">
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Progress</th>
+                                <th>Status</th>
+                                <th>Planned End Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in projects %}
+                            <tr>
+                                <td>{{ project.ProjectName }}</td>
+                                <td>
+                                    <div class="progress-container">
+                                        <div class="progress-bar" 
+                                             style="width: '{{ project.ProgressPercentage }}%'"
+                                             data-percentage="{{ project.ProgressPercentage }}">
+                                            <span class="progress-text">{{ project.ProgressPercentage }}%</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if project.ProgressPercentage == 100 %}
+                                    <span class="status-badge status-completed">Completed</span>
+                                    {% elif project.ProgressPercentage > 0 %}
+                                    <span class="status-badge status-in-progress">In Progress</span>
+                                    {% else %}
+                                    <span class="status-badge status-not-started">Not Started</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ project.PlannedEndDate }}</td>
+                                <td>
+                                    <button class="action-btn view-btn" title="View Details">👁️</button>
+                                    <button class="action-btn edit-btn" title="Edit">✏️</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Sidebar -->
+        <div class="card sidebar-card">
+            <h3>Quick Stats</h3>
+            <div class="sidebar-content">
+                <div class="stat-item">
+                    <span>Avg. Completion</span>
+                    <strong>{{ avg_completion }}%</strong>
+                </div>
+                <div class="stat-item">
+                    <span>Overdue Projects</span>
+                    <strong>{{ projects|selectattr('PlannedEndDate', 'lt', current_date)|list|length }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

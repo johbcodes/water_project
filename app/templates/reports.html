@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Link to the external CSS file -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+
+<div class="reports-container">
+    <h2>Reports Dashboard</h2>
+
+    <!-- Date Range Filters -->
+    <div class="filters">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" class="filter-input">
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" class="filter-input">
+
+        <button onclick="applyFilters()" class="filter-button">Apply Filters</button>
+        <button onclick="exportData()" class="export-button">Export Data as CSV</button>
+    </div>
+
+    <!-- Project Progress Chart -->
+    <div class="chart-container">
+        <h3>Project Progress</h3>
+        <canvas id="progressChart"></canvas>
+    </div>
+
+    <!-- Water Usage by Region Chart -->
+    <div class="chart-container">
+        <h3>Water Usage by Region</h3>
+        <canvas id="waterUsageByRegionChart"></canvas>
+    </div>
+
+    <!-- Water Source Distribution Chart -->
+    <div class="chart-container">
+        <h3>Water Source Distribution</h3>
+        <canvas id="waterSourceDistributionChart"></canvas>
+    </div>
+
+    <!-- Real-Time Water Usage Chart -->
+    <div class="chart-container">
+        <h3>Real-Time Water Usage</h3>
+        <canvas id="realTimeWaterUsageChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize charts
+        const progressChart = initializeProgressChart();
+        const waterUsageByRegionChart = initializeWaterUsageByRegionChart();
+        const waterSourceDistributionChart = initializeWaterSourceDistributionChart();
+        const realTimeWaterUsageChart = initializeRealTimeWaterUsageChart();
+
+        // Apply filters when the page loads
+        applyFilters();
+    });
+
+    // Initialize Project Progress Chart
+    function initializeProgressChart() {
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        const rawProjectsData = JSON.parse('{{ projects | tojson | safe }}');
+        const projectNames = rawProjectsData.map(project => project.ProjectName);
+        const progressData = rawProjectsData.map(project => project.ProgressPercentage);
+
+        return new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: projectNames,
+                datasets: [{
+                    label: 'Progress %',
+                    data: progressData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+
+    // Initialize Water Usage by Region Chart
+    function initializeWaterUsageByRegionChart() {
+        const ctx = document.getElementById('waterUsageByRegionChart').getContext('2d');
+        return new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Water Usage (m³)',
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Initialize Water Source Distribution Chart
+    function initializeWaterSourceDistributionChart() {
+        const ctx = document.getElementById('waterSourceDistributionChart').getContext('2d');
+        return new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Capacity (m³)',
+                    data: [],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+
+    // Initialize Real-Time Water Usage Chart
+    function initializeRealTimeWaterUsageChart() {
+        const ctx = document.getElementById('realTimeWaterUsageChart').getContext('2d');
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Water Usage (m³)',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Apply Filters
+    function applyFilters() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        // Fetch and update Water Usage by Region Chart
+        fetch(`/api/water_usage_by_region?start_date=${startDate}&end_date=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                const chart = Chart.getChart('waterUsageByRegionChart');
+                chart.data.labels = data.map(item => item.RegionName);
+                chart.data.datasets[0].data = data.map(item => item.TotalUsage);
+                chart.update();
+            });
+
+        // Fetch and update Water Source Distribution Chart
+        fetch(`/api/water_source_distribution?start_date=${startDate}&end_date=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                const chart = Chart.getChart('waterSourceDistributionChart');
+                chart.data.labels = data.map(item => item.SourceType);
+                chart.data.datasets[0].data = data.map(item => item.TotalCapacity);
+                chart.update();
+            });
+
+        // Fetch and update Real-Time Water Usage Chart
+        fetch('/api/real_time_water_usage')
+            .then(response => response.json())
+            .then(data => {
+                const chart = Chart.getChart('realTimeWaterUsageChart');
+                chart.data.labels = data.map(item => item.UsageDate);
+                chart.data.datasets[0].data = data.map(item => item.Usage);
+                chart.update();
+            });
+    }
+
+    // Export Data as CSV
+    function exportData() {
+        const barChartData = Chart.getChart('waterUsageByRegionChart').data;
+        const pieChartData = Chart.getChart('waterSourceDistributionChart').data;
+
+        // Convert bar chart data to CSV
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Region,Water Usage (m³)\n";
+        barChartData.labels.forEach((label, index) => {
+            csvContent += `${label},${barChartData.datasets[0].data[index]}\n`;
+        });
+
+        // Convert pie chart data to CSV
+        csvContent += "\nSource Type,Capacity (m³)\n";
+        pieChartData.labels.forEach((label, index) => {
+            csvContent += `${label},${pieChartData.datasets[0].data[index]}\n`;
+        });
+
+        // Create a download link
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "water_usage_report.csv");
+        document.body.appendChild(link);
+        link.click();
+    }
+</script>
+{% endblock %}

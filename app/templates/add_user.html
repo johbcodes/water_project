@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0"><i class="fas fa-user-plus me-2"></i> Add User</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" class="form-container">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label for="username" class="form-label">{{ form.username.label }}</label>
+                    {{ form.username(class="form-control", id="username") }}
+                    {% for error in form.username.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">{{ form.password.label }}</label>
+                    {{ form.password(class="form-control", id="password") }}
+                    {% for error in form.password.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    <label for="role" class="form-label">{{ form.role.label }}</label>
+                    {{ form.role(class="form-select", id="role") }}
+                    {% for error in form.role.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i> Add User</button>
+                    <a href="{{ url_for('main.user_management') }}" class="btn btn-secondary ms-2"><i class="fas fa-arrow-left me-2"></i> Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

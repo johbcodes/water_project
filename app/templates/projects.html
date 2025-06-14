@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0"><i class="fas fa-project-diagram me-2"></i> Projects</h2>
+        </div>
+        <div class="card-body">
+            <h3>Projects</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td>{{ project.ProjectName }}</td>
+                        <td>{{ project.Description }}</td>
+                        <td>
+                            <a href="{{ url_for('main.view_projects', project_id=project.ProjectID) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                            <a href="{{ url_for('main.edit_project', project_id=project.ProjectID) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="{{ url_for('main.add_project') }}" class="btn btn-primary"><i class="fas fa-plus me-2"></i> Add Project</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .edit-user-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 140px); /* Adjust for navbar and footer */
+        padding: 20px;
+    }
+    .edit-user-card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+        overflow: hidden;
+    }
+    .edit-user-header {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        border-bottom: 4px solid #28a745;
+    }
+    .edit-user-body {
+        padding: 30px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+    .form-control, .form-select {
+        border: 1px solid #e0e4e8;
+        border-radius: 6px;
+        padding: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        outline: none;
+    }
+    .text-danger {
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: block;
+    }
+    .btn-submit {
+        background-color: #007bff;
+        border: none;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border-radius: 6px;
+        width: 100%;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+    .btn-submit:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+    .btn-back {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        color: #007bff;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .btn-back:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+    @media (max-width: 576px) {
+        .edit-user-card {
+            max-width: 100%;
+            margin: 0 10px;
+        }
+        .edit-user-header h2 {
+            font-size: 1.5rem;
+        }
+        .btn-submit {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="edit-user-container">
+    <div class="edit-user-card">
+        <div class="edit-user-header">
+            <h2><i class="fas fa-user-edit me-2"></i> Edit User</h2>
+        </div>
+        <div class="edit-user-body">
+            <form method="POST" action="{{ url_for('main.edit_user', user_id=user.UserID) }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <label for="username" class="form-label">{{ form.username.label }}</label>
+                    {{ form.username(class="form-control", id="username", placeholder="Enter username") }}
+                    {% for error in form.username.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">{{ form.password.label }}</label>
+                    {{ form.password(class="form-control", id="password", placeholder="Enter new password (optional)") }}
+                    {% for error in form.password.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="role" class="form-label">{{ form.role.label }}</label>
+                    {{ form.role(class="form-select", id="role") }}
+                    {% for error in form.role.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div>
+                    {{ form.submit(class="btn btn-submit") }}  <!-- Ensure this matches the form field name -->
+                </div>
+                <a href="{{ url_for('main.user_management') }}" class="btn-back">Back to User Management</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Water Project Management{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+    <style>
+        /* Ensure the main content area doesn’t overflow */
+        .main-content {
+            overflow-x: hidden; /* Prevent horizontal overflow in main content */
+            flex: 1; /* Ensure it takes remaining space */
+        }
+
+        /* Adjust sidebar width and ensure it doesn’t interfere with main content */
+        .sidebar {
+            width: 250px; /* Fixed width for sidebar */
+            min-width: 250px;
+            flex-shrink: 0; /* Prevent sidebar from shrinking */
+            overflow-y: auto; /* Allow vertical scrolling in sidebar if needed */
+        }
+
+        /* Ensure the flex container for sidebar and main content works correctly */
+        .d-flex.flex-grow-1 {
+            width: 100%;
+            overflow-x: hidden; /* Prevent overflow at the top level */
+        }
+
+        /* Ensure dropdown menu fits within sidebar */
+        .sidebar .dropdown-menu {
+            position: absolute;
+            left: 100%; /* Position dropdown to the right of the sidebar */
+            top: 0;
+            margin-left: 5px; /* Small margin for spacing */
+            min-width: 200px; /* Ensure dropdown has enough width */
+        }
+
+        /* Prevent dropdown from overflowing the sidebar */
+        .sidebar .nav-item {
+            position: relative;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">
+                <img src="{{ url_for('static', filename='images/kenya_logo.png') }}" alt="Logo" class="navbar-logo me-2">
+                State Department for Water and Sanitation Project Management System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-primary" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i> {{ current_user.Username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('main.profile') }}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-primary" href="#" id="authDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i> Account
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="authDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('auth.login') }}">Login</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.register') }}">Register</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="d-flex flex-grow-1">
+        {% if current_user.is_authenticated %}
+            <!-- Vertical Sidebar -->
+            <nav class="sidebar">
+                <div class="sidebar-header">
+                    <h5 class="text-white">Menu</h5>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.home') }}"><i class="fas fa-home me-2"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown sidebar-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="projectsManagementDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <i class="fas fa-project-diagram me-2"></i> Projects Management
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="projectsManagementDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('main.add_project') }}"><i class="fas fa-plus-circle me-2"></i> Add Projects</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.view_projects') }}"><i class="fas fa-eye me-2"></i> View Projects</a></li>
+                        </ul>
+                    </li>
+                    {% if current_user.Role == 'Admin' %}
+                        <li class="nav-item dropdown sidebar-dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userManagementDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                <i class="fas fa-users-cog me-2"></i> User Management
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="userManagementDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('main.add_user') }}"><i class="fas fa-user-plus me-2"></i> Add User</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.user_management') }}"><i class="fas fa-user-edit me-2"></i> Edit User</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.reports') }}"><i class="fas fa-chart-bar me-2"></i> Reports</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+
+        <!-- Main Content -->
+        <main class="main-content flex-grow-1">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+        <div class="container">
+            <p class="mb-0">© 2025 Water Project Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Load jQuery before Bootstrap to support DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select all flash message alerts
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                // Automatically dismiss after 2 seconds (2000 milliseconds)
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 2000);
+            });
+        });
+    </script>
+    {% endblock %}
+</body>
+</html>
