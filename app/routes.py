@@ -156,8 +156,26 @@ def view_projects():
         project.SourceOfFunds = funding.SourceOfFunds if funding else "Unknown"
         project.FundingAmount = getattr(funding, funding_map.get(project.SourceOfFunds), 0.0) if funding else 0.0
 
-    return render_template('view_projects.html', projects=projects)
 
+    return render_template('view_projects.html', projects=projects)
+# @app.route('/project/<int:project_id>/details')
+# @login_required
+# def get_project_details(project_id):
+#     """Get detailed project information for the modal view"""
+#     try:
+#         project = Project.query.get_or_404(project_id)
+        
+#         # Build the project details dictionary
+#         project_details = {
+#             'ProjectID': project.ProjectID,
+#             'ProjectName': project.ProjectName,
+#             'ImplementingAgency': project.ImplementingAgency,
+#             'Program': project.Program,
+#             'ProjectType': project.ProjectType,
+#             'ProjectLocation': project.ProjectLocation,
+#             'CountyName': project.county.CountyName if project.county else None,
+#             'ConstituencyName': project.constituency.ConstituencyName if project.constituency else None,
+            
 @main.route('/reports')
 @login_required
 def reports():

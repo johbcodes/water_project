@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block title %}View Projects{% endblock %}
-
 {% block extra_css %}
 <!-- Link to the CSS file specifically for view_projects.html -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/viewproject.css') }}">
@@ -9,8 +7,37 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <!-- DataTables Buttons CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-{% endblock %}
+<style>
+    .view-btn {
+        white-space: nowrap;
+    }
 
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+
+    .table td.actions-col {
+        max-width: none;
+        width: 120px;
+    }
+
+    .progress-bar-cell {
+        min-width: 80px;
+    }
+
+    .progress {
+        height: 20px;
+        margin: 0;
+    }
+
+    .currency {
+        text-align: right;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
@@ -20,16 +47,20 @@
                     <h1 class="h3 mb-0">Projects Overview</h1>
                     <div class="d-flex align-items-center">
                         {% if current_user.Role in ['Admin', 'Manager'] %}
-                            <a href="{{ url_for('main.add_project') }}" class="btn btn-primary btn-sm me-2"><i class="fas fa-plus me-1"></i> Add Project</a>
-                            <!-- Upload Excel Button -->
-                            <button type="button" class="btn btn-info btn-sm me-2" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">
-                                <i class="fas fa-upload me-1"></i> Upload Projects
-                            </button>
+                        <a href="{{ url_for('main.add_project') }}" class="btn btn-primary btn-sm me-2"><i
+                                class="fas fa-plus me-1"></i> Add Project</a>
+                        <!-- Upload Excel Button -->
+                        <button type="button" class="btn btn-info btn-sm me-2" data-bs-toggle="modal"
+                            data-bs-target="#uploadExcelModal">
+                            <i class="fas fa-upload me-1"></i> Upload Projects
+                        </button>
                         {% endif %}
-                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary btn-sm me-2"><i class="fas fa-arrow-left me-1"></i> Back to Dashboard</a>
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary btn-sm me-2"><i
+                                class="fas fa-arrow-left me-1"></i> Back to Dashboard</a>
                         <!-- Export Dropdown -->
                         <div class="dropdown">
-                            <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="exportDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-download me-1"></i> Export
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="exportDropdown">
@@ -44,14 +75,14 @@
                 </div>
                 <div class="card-body">
                     {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                                <div class="alert alert-{{ category }} alert-dismissible fade show mb-3" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mb-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
                     {% endwith %}
                     <div class="table-wrapper">
                         <div class="table-header d-flex justify-content-between align-items-center mb-3">
@@ -60,108 +91,90 @@
                         <table id="projectsTable" class="table table-striped table-hover">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Project ID</th>
+                                    <th>Project Name</th>
                                     <th>Implementing Agency</th>
                                     <th>Program</th>
-                                    <th>Project Name</th>
                                     <th>County</th>
                                     <th>Constituency</th>
-                                    <th>Ward</th>
-                                    <th>GPS Coordinates</th>
-                                    <th>Project Type</th>
                                     <th>Project Location</th>
-                                    <th>Scope of Works</th>
-                                    <th>Intake Capacity (m³)</th>
-                                    <th>Treatment Capacity (m³)</th>
-                                    <th>Storage Capacity (m³)</th>
-                                    <th>Treated Water Mains (km)</th>
-                                    <th>Distribution Lines (km)</th>
-                                    <th>Water Kiosks</th>
-                                    <th>Connections</th>
-                                    <th>Wastewater Capacity (m³)</th>
-                                    <th>Target Areas</th>
-                                    <th>Target Households</th>
-                                    <th>Target Population</th>
-                                    <th>Contractor</th>
-                                    <th>Consultant</th>
-                                    <th>Start Date</th>
-                                    <th>Planned End Date</th>
-                                    <th>Actual End Date</th>
                                     <th>Progress (%)</th>
                                     <th>Total Contract Sum (KES)</th>
-                                    <th>Cumulative Expenditure (KES)</th>
-                                    <th>Outstanding Cost (KES)</th>
-                                    <th>Exchequer Releases (KES)</th>
-                                    <th>Pending Bills (KES)</th>
-                                    <th>FY2021-22 Budget</th>
-                                    <th>FY2021-23 Budget</th>
-                                    <th>FY2022-23 Budget</th>
-                                    <th>FY2022-24 Budget</th>
-                                    <th>FY2023-24 Budget</th>
-                                    <th>FY2023-25 Budget</th>
-                                    <th>FY2024-25 Allocation</th>
-                                    <th>FY2024-26 Allocation</th>
+                                    <th>Start Date</th>
+                                    <th>Planned End Date</th>
                                     <th>Source of Funds</th>
-                                    <th>Funding Amount (KES)</th>
-                                    <th>Impacts</th>
-                                    <th>Challenges</th>
-                                    <th>Remarks</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for project in projects %}
                                 <tr>
-                                    <td>{{ project.ProjectID }}</td>
-                                    <td>{{ project.ImplementingAgency }}</td>
-                                    <td>{{ project.Program }}</td>
-                                    <td>{{ project.ProjectName }}</td>
+                                    <td title="{{ project.ProjectName }}">{{ project.ProjectName }}</td>
+                                    <td title="{{ project.ImplementingAgency }}">{{ project.ImplementingAgency }}</td>
+                                    <td title="{{ project.Program }}">{{ project.Program }}</td>
                                     <td>{{ project.county.CountyName if project.county else '' }}</td>
                                     <td>{{ project.constituency.ConstituencyName if project.constituency else '' }}</td>
-                                    <td>{{ project.ward.WardName if project.ward else '' }}</td>
-                                    <td>{{ project.GPSCoordinates }}</td>
-                                    <td>{{ project.ProjectType }}</td>
-                                    <td>{{ project.ProjectLocation }}</td>
-                                    <td class="truncate" data-full-text="{{ project.ScopeOfWorks }}">{{ project.ScopeOfWorks }}</td>
-                                    <td>{{ project.IntakeCapacity_m3 }}</td>
-                                    <td>{{ project.TreatmentCapacity_m3 }}</td>
-                                    <td>{{ project.StorageCapacity_m3 }}</td>
-                                    <td>{{ project.TreatedWaterMains_km }}</td>
-                                    <td>{{ project.DistributionLines_km }}</td>
-                                    <td>{{ project.NumberOfWaterKiosks }}</td>
-                                    <td>{{ project.NumberOfConnections }}</td>
-                                    <td>{{ project.WastewaterCapacity_m3 }}</td>
-                                    <td>{{ project.TargetAreas }}</td>
-                                    <td>{{ project.TargetBeneficiaries_Households }}</td>
-                                    <td>{{ project.TargetBeneficiaries_Population }}</td>
-                                    <td>{{ project.Contractor }}</td>
-                                    <td>{{ project.Consultant }}</td>
-                                    <td>{{ project.StartDate }}</td>
-                                    <td>{{ project.PlannedEndDate }}</td>
-                                    <td>{{ project.ActualEndDate }}</td>
-                                    <td>{{ project.ProgressPercentage }}</td>
-                                    <td>{{ "{:,.2f}".format(project.TotalContractSum_KES) if project.TotalContractSum_KES else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.CumulativeExpenditure_KES) if project.CumulativeExpenditure_KES else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.OutstandingCost_KES) if project.OutstandingCost_KES else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.ExchequerReleases_KES) if project.ExchequerReleases_KES else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.SumOfPendingBills_KES) if project.SumOfPendingBills_KES else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.ApprovedBudgetFY2021_22) if project.ApprovedBudgetFY2021_22 else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.ApprovedBudgetFY2021_23) if project.ApprovedBudgetFY2021_23 else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.ApprovedBudgetFY2022_23) if project.ApprovedBudgetFY2022_23 else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.ApprovedBudgetFY2022_24) if project.ApprovedBudgetFY2022_24 else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.ApprovedBudgetFY2023_24) if project.ApprovedBudgetFY2023_24 else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.ApprovedBudgetFY2023_25) if project.ApprovedBudgetFY2023_25 else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.BudgetAllocationFY2024_25) if project.BudgetAllocationFY2024_25 else '' }}</td>
-                                    <td>{{ "{:,.2f}".format(project.BudgetAllocationFY2024_26) if project.BudgetAllocationFY2024_26 else '' }}</td>
-                                    <td>{{ project.SourceOfFunds }}</td>
-                                    <td>{{ "{:,.2f}".format(project.FundingAmount) if project.FundingAmount else '0.00' }}</td>
-                                    <td class="truncate" data-full-text="{{ project.ImpactsOfTheProject }}">{{ project.ImpactsOfTheProject }}</td>
-                                    <td class="truncate" data-full-text="{{ project.KeyChallenges }}">{{ project.KeyChallenges }}</td>
-                                    <td class="truncate" data-full-text="{{ project.Remarks }}">{{ project.Remarks }}</td>
                                     <td>
-                                        {% if current_user.Role == 'Admin' %}
-                                            <a href="{{ url_for('main.edit_project', project_id=project.ProjectID) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                                        {% if project.ProjectLocation %}
+                                        <span
+                                            class="badge bg-{{ 'success' if project.ProjectLocation == 'Urban' else 'info' }}">
+                                            {{ project.ProjectLocation }}
+                                        </span>
                                         {% endif %}
+                                    </td>
+                                    <td class="progress-bar-cell">
+                                        {% if project.ProgressPercentage %}
+                                        <div class="progress">
+                                            <div class="progress-bar bg-{{ 'success' if project.ProgressPercentage >= 80 else 'warning' if project.ProgressPercentage >= 50 else 'danger' }}"
+                                                role="progressbar" style="width: {{ project.ProgressPercentage }}%"
+                                                aria-valuenow="{{ project.ProgressPercentage }}" aria-valuemin="0"
+                                                aria-valuemax="100">
+                                                {{ project.ProgressPercentage }}%
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                        <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="currency">
+                                        {% if project.TotalContractSum_KES %}
+                                        {{ "{:,.0f}".format(project.TotalContractSum_KES) }}
+                                        {% else %}
+                                        <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if project.StartDate %}
+                                        {{ project.StartDate.strftime('%Y-%m-%d') }}
+                                        {% else %}
+                                        <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if project.PlannedEndDate %}
+                                        {{ project.PlannedEndDate.strftime('%Y-%m-%d') }}
+                                        {% else %}
+                                        <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if project.SourceOfFunds %}
+                                        <span class="badge bg-primary">{{ project.SourceOfFunds }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="actions-col">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-info view-btn"
+                                                data-bs-toggle="modal" data-bs-target="#projectDetailModal"
+                                                data-project-id="{{ project.ProjectID }}">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                            {% if current_user.Role == 'Admin' %}
+                                            <a href="{{ url_for('main.edit_project', project_id=project.ProjectID) }}"
+                                                class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            {% endif %}
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -169,6 +182,31 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Project Detail Modal -->
+<div class="modal fade" id="projectDetailModal" tabindex="-1" aria-labelledby="projectDetailModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projectDetailModalLabel">Project Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="projectDetailContent">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -183,22 +221,27 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="uploadExcelForm" method="POST" action="{{ url_for('main.upload_projects_excel') }}" enctype="multipart/form-data">
+                <form id="uploadExcelForm" method="POST" action="{{ url_for('main.upload_projects_excel') }}"
+                    enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="excelFile" class="form-label">Select Excel File (.xlsx or .xls)</label>
-                        <input type="file" class="form-control" id="excelFile" name="excel_file" accept=".xlsx, .xls" required>
+                        <input type="file" class="form-control" id="excelFile" name="excel_file" accept=".xlsx, .xls"
+                            required>
                         <small class="form-text text-muted">
-                            Upload a raw data file with these required columns in the first row: ProjectName, CountyID, SourceOfFunds, FundingAmount (case-insensitive). 
-                            ProjectID is auto-generated by the system and should not be included in the file. 
-                            Example: 
+                            Upload a raw data file with these required columns in the first row: ProjectName, CountyID,
+                            SourceOfFunds, FundingAmount (case-insensitive).
+                            ProjectID is auto-generated by the system and should not be included in the file.
+                            Example:
                             <pre>ProjectName | CountyID | SourceOfFunds | FundingAmount
 Water Supply Project | 1 | GoK | 5000000</pre>
-                            Do <strong>not</strong> upload an export from the "View Projects" page (e.g., "View Projects.xlsx").
+                            Do <strong>not</strong> upload an export from the "View Projects" page (e.g., "View
+                            Projects.xlsx").
                         </small>
                     </div>
                     <button type="submit" class="btn btn-primary" id="uploadBtn">
                         <span id="uploadText">Upload</span>
-                        <span class="spinner-border spinner-border-sm d-none" id="uploadSpinner" role="status" aria-hidden="true"></span>
+                        <span class="spinner-border spinner-border-sm d-none" id="uploadSpinner" role="status"
+                            aria-hidden="true"></span>
                     </button>
                 </form>
             </div>
@@ -223,16 +266,16 @@ Water Supply Project | 1 | GoK | 5000000</pre>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 <!-- Custom Script -->
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var table = $('#projectsTable').DataTable({
-            scrollX: true, // Enable horizontal scrolling within the table
-            scrollCollapse: true, // Adjust table height if content is less
+            scrollX: true,
+            scrollCollapse: true,
             paging: true,
-            pageLength: 10,
+            pageLength: 25,
             lengthMenu: [10, 25, 50, 100],
             searching: true,
             ordering: true,
-            dom: '<"table-header"f>t<"table-footer"ip>', // No buttons in DOM layout
+            dom: '<"table-header"f>t<"table-footer"ip>',
             buttons: [
                 { extend: 'copy', className: 'copy-btn' },
                 { extend: 'csv', className: 'csv-btn' },
@@ -243,67 +286,234 @@ Water Supply Project | 1 | GoK | 5000000</pre>
                     orientation: 'landscape',
                     pageSize: 'A3',
                     exportOptions: {
-                        columns: ':visible' // Export only visible columns
+                        columns: ':visible'
                     }
                 },
                 { extend: 'print', className: 'print-btn' }
             ],
             columnDefs: [
                 { targets: '_all', className: 'text-wrap' },
-                { targets: [10, 43, 44, 45], className: 'truncate' }
-            ]
+                { targets: [6], orderable: true, type: 'num' }, // Progress column
+                { targets: [7], orderable: true, type: 'num' }, // Contract sum column
+                { targets: [11], orderable: false } // Actions column
+            ],
+            order: [[8, 'desc']] // Sort by start date descending
         });
 
-        // Truncate text initially
-        $('.truncate').each(function() {
-            var $this = $(this);
-            var fullText = $this.data('full-text') || '';
-            if (fullText) {
-                $this.text(fullText.split(' ').slice(0, 3).join(' ') + '...');
-            }
+        // Handle View button click
+        $(document).on('click', '.view-btn', function () {
+            var projectId = $(this).data('project-id');
+            loadProjectDetails(projectId);
         });
 
-        // Click to expand truncated text
-        $('.truncate').on('click', function() {
-            var $this = $(this);
-            if ($this.hasClass('expanded')) {
-                $this.removeClass('expanded').text($this.data('full-text').split(' ').slice(0, 3).join(' ') + '...');
-            } else {
-                $this.addClass('expanded').text($this.data('full-text'));
-            }
-        });
+        // Function to load project details via AJAX
+        function loadProjectDetails(projectId) {
+            $('#projectDetailContent').html(`
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `);
+
+            // You'll need to create this endpoint in your Flask app
+            $.ajax({
+                url: '/project/' + projectId + '/details',
+                method: 'GET',
+                success: function (data) {
+                    displayProjectDetails(data);
+                },
+                error: function () {
+                    $('#projectDetailContent').html(`
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Error loading project details. Please try again.
+                        </div>
+                    `);
+                }
+            });
+        }
+
+        // Function to display project details in modal
+        function displayProjectDetails(project) {
+            var detailsHtml = `
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="text-primary mb-3">${project.ProjectName}</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-info-circle"></i> Basic Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <tr><td><strong>Project ID:</strong></td><td>${project.ProjectID}</td></tr>
+                                    <tr><td><strong>Implementing Agency:</strong></td><td>${project.ImplementingAgency || 'N/A'}</td></tr>
+                                    <tr><td><strong>Program:</strong></td><td>${project.Program || 'N/A'}</td></tr>
+                                    <tr><td><strong>Project Type:</strong></td><td>${project.ProjectType || 'N/A'}</td></tr>
+                                    <tr><td><strong>Project Location:</strong></td><td>${project.ProjectLocation || 'N/A'}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-map-marker-alt"></i> Location Details</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <tr><td><strong>County:</strong></td><td>${project.CountyName || 'N/A'}</td></tr>
+                                    <tr><td><strong>Constituency:</strong></td><td>${project.ConstituencyName || 'N/A'}</td></tr>
+                                    <tr><td><strong>Ward:</strong></td><td>${project.WardName || 'N/A'}</td></tr>
+                                    <tr><td><strong>GPS Coordinates:</strong></td><td>${project.GPSCoordinates || 'N/A'}</td></tr>
+                                    <tr><td><strong>Target Areas:</strong></td><td>${project.TargetAreas || 'N/A'}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-calendar-alt"></i> Timeline & Progress</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <tr><td><strong>Start Date:</strong></td><td>${project.StartDate || 'N/A'}</td></tr>
+                                    <tr><td><strong>Planned End Date:</strong></td><td>${project.PlannedEndDate || 'N/A'}</td></tr>
+                                    <tr><td><strong>Actual End Date:</strong></td><td>${project.ActualEndDate || 'N/A'}</td></tr>
+                                    <tr><td><strong>Progress:</strong></td><td>
+                                        ${project.ProgressPercentage ?
+                    `<div class="progress" style="height: 20px;">
+                                                <div class="progress-bar bg-${project.ProgressPercentage >= 80 ? 'success' : project.ProgressPercentage >= 50 ? 'warning' : 'danger'}" 
+                                                     style="width: ${project.ProgressPercentage}%">${project.ProgressPercentage}%</div>
+                                            </div>` : 'N/A'}
+                                    </td></tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-users"></i> Stakeholders</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <tr><td><strong>Contractor:</strong></td><td>${project.Contractor || 'N/A'}</td></tr>
+                                    <tr><td><strong>Consultant:</strong></td><td>${project.Consultant || 'N/A'}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-money-bill-wave"></i> Financial Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-sm table-borderless">
+                                            <tr><td><strong>Total Contract Sum (KES):</strong></td><td class="text-end">${project.TotalContractSum_KES ? Number(project.TotalContractSum_KES).toLocaleString() : 'N/A'}</td></tr>
+                                            <tr><td><strong>Cumulative Expenditure (KES):</strong></td><td class="text-end">${project.CumulativeExpenditure_KES ? Number(project.CumulativeExpenditure_KES).toLocaleString() : 'N/A'}</td></tr>
+                                            <tr><td><strong>Outstanding Cost (KES):</strong></td><td class="text-end">${project.OutstandingCost_KES ? Number(project.OutstandingCost_KES).toLocaleString() : 'N/A'}</td></tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table table-sm table-borderless">
+                                            <tr><td><strong>Source of Funds:</strong></td><td><span class="badge bg-primary">${project.SourceOfFunds || 'N/A'}</span></td></tr>
+                                            <tr><td><strong>Exchequer Releases (KES):</strong></td><td class="text-end">${project.ExchequerReleases_KES ? Number(project.ExchequerReleases_KES).toLocaleString() : 'N/A'}</td></tr>
+                                            <tr><td><strong>Pending Bills (KES):</strong></td><td class="text-end">${project.SumOfPendingBills_KES ? Number(project.SumOfPendingBills_KES).toLocaleString() : 'N/A'}</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-cogs"></i> Technical Specifications</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <tr><td><strong>Intake Capacity (m³):</strong></td><td>${project.IntakeCapacity_m3 || 'N/A'}</td></tr>
+                                    <tr><td><strong>Treatment Capacity (m³):</strong></td><td>${project.TreatmentCapacity_m3 || 'N/A'}</td></tr>
+                                    <tr><td><strong>Storage Capacity (m³):</strong></td><td>${project.StorageCapacity_m3 || 'N/A'}</td></tr>
+                                    <tr><td><strong>Treated Water Mains (km):</strong></td><td>${project.TreatedWaterMains_km || 'N/A'}</td></tr>
+                                    <tr><td><strong>Distribution Lines (km):</strong></td><td>${project.DistributionLines_km || 'N/A'}</td></tr>
+                                    <tr><td><strong>Water Kiosks:</strong></td><td>${project.NumberOfWaterKiosks || 'N/A'}</td></tr>
+                                    <tr><td><strong>Connections:</strong></td><td>${project.NumberOfConnections || 'N/A'}</td></tr>
+                                    <tr><td><strong>Wastewater Capacity (m³):</strong></td><td>${project.WastewaterCapacity_m3 || 'N/A'}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-users-cog"></i> Beneficiaries</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <tr><td><strong>Target Households:</strong></td><td>${project.TargetBeneficiaries_Households ? Number(project.TargetBeneficiaries_Households).toLocaleString() : 'N/A'}</td></tr>
+                                    <tr><td><strong>Target Population:</strong></td><td>${project.TargetBeneficiaries_Population ? Number(project.TargetBeneficiaries_Population).toLocaleString() : 'N/A'}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${project.ScopeOfWorks || project.ImpactsOfTheProject || project.KeyChallenges || project.Remarks ? `
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-clipboard-list"></i> Additional Information</h6>
+                            </div>
+                            <div class="card-body">
+                                ${project.ScopeOfWorks ? `<div class="mb-3"><strong>Scope of Works:</strong><br><p class="text-muted">${project.ScopeOfWorks}</p></div>` : ''}
+                                ${project.ImpactsOfTheProject ? `<div class="mb-3"><strong>Project Impacts:</strong><br><p class="text-muted">${project.ImpactsOfTheProject}</p></div>` : ''}
+                                ${project.KeyChallenges ? `<div class="mb-3"><strong>Key Challenges:</strong><br><p class="text-muted">${project.KeyChallenges}</p></div>` : ''}
+                                ${project.Remarks ? `<div class="mb-3"><strong>Remarks:</strong><br><p class="text-muted">${project.Remarks}</p></div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+            `;
+
+            $('#projectDetailContent').html(detailsHtml);
+        }
 
         // Trigger export actions via dropdown items
-        $('.dropdown-item[data-export]').on('click', function(e) {
+        $('.dropdown-item[data-export]').on('click', function (e) {
             e.preventDefault();
             var exportType = $(this).data('export');
-            // Map export type to button index
             var buttonIndex;
             switch (exportType) {
-                case 'copy':
-                    buttonIndex = 0;
-                    break;
-                case 'csv':
-                    buttonIndex = 1;
-                    break;
-                case 'excel':
-                    buttonIndex = 2;
-                    break;
-                case 'pdf':
-                    buttonIndex = 3;
-                    break;
-                case 'print':
-                    buttonIndex = 4;
-                    break;
-                default:
-                    return; // Invalid export type
+                case 'copy': buttonIndex = 0; break;
+                case 'csv': buttonIndex = 1; break;
+                case 'excel': buttonIndex = 2; break;
+                case 'pdf': buttonIndex = 3; break;
+                case 'print': buttonIndex = 4; break;
+                default: return;
             }
-            // Trigger the corresponding DataTables button
             table.button(buttonIndex).trigger();
         });
 
         // Handle form submission with feedback
-        $('#uploadExcelForm').on('submit', function(e) {
+        $('#uploadExcelForm').on('submit', function (e) {
             const fileInput = $('#excelFile')[0];
             if (!fileInput.files.length) {
                 e.preventDefault();
@@ -316,7 +526,6 @@ Water Supply Project | 1 | GoK | 5000000</pre>
                 alert('Please upload an Excel file (.xlsx or .xls).');
                 return;
             }
-            // Show loading spinner
             $('#uploadText').text('Uploading...');
             $('#uploadSpinner').removeClass('d-none');
             $('#uploadBtn').prop('disabled', true);
